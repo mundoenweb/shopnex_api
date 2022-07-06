@@ -6,7 +6,8 @@ class StructResponse {
     },
     this.messageError = {
       code: messageError.code || null,
-      message: messageError.message || null
+      message: messageError.message || null,
+      errorSQL: messageError.errorSQL || null
     },
     this.data = data
   }
