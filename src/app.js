@@ -2,6 +2,10 @@
 const express = require('express')
 const connection = require('./db/connection')
 const StructResponse = require('./models/response')
+require('dotenv').config()
+
+// module routers
+const routerLogin = require('./routes/login/login')
 
 // creando app
 const app = express()
@@ -13,17 +17,10 @@ const port = app.get('port')
 
 // middlewares
 app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
 
 // rutas
-app.get('/', (request, rsp) => {
-
-  const responJson = new StructResponse({
-    code: 200,
-    message: "consulta exitosa"
-  })
-
-  rsp.status(200).json(responJson)
-})
+app.use(routerLogin)
 
 
 
