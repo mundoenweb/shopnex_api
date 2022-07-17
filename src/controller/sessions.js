@@ -6,7 +6,6 @@ const StructResponse = require('../models/response')
 const secretPassword = "Adoracionviva.3467"
 
 const postLogin = (req, res) => {
-  console.log('me estan consultando')
   const email = req.body.email
   const password = req.body.password
 
@@ -27,7 +26,6 @@ const postLogin = (req, res) => {
     delete user.password
 
     const optionsJWT = { expiresIn: 84600 }
-    console.log('certificado, produciendo token')
     jwt.sign({ user }, secretPassword, optionsJWT, (_, token) => {
 
       const responseJson = new StructResponse({
