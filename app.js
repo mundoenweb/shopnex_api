@@ -19,6 +19,7 @@ const routerTypeMovement = require('./src/routes/typeMovement')
 const routerTasks = require('./src/routes/tasks')
 const routerProfits = require('./src/routes/profits')
 const routerMovements = require('./src/routes/movements')
+const routerFiles = require('./src/routes/images')
 
 // creando app
 const app = express()
@@ -33,10 +34,11 @@ const port = 3467
 
 // middlewares
 app.use(cors())
+app.use(fileUpload())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
-app.use(fileUpload())
 
+app.use(routerFiles)
 app.use(api, routerLogin)
 app.post(`${api}/register`, usersCreate)
 
