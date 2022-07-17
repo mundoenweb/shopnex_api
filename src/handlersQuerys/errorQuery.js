@@ -8,7 +8,6 @@ const messageErrors = {
 }
 
 const textError = (status) => {
-  console.log(messageErrors)
   if (status == 400) return messageErrors[status]
   if (status == 401) return messageErrors[status]
   if (status >= 500) return messageErrors["500"]
