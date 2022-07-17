@@ -164,9 +164,9 @@ const usersUpdateCredentials = (req, res) => {
     const extension = image.name.split('.')[1]
     image.name = `${image.md5}.${extension}`
 
-    image.mv(`./files/${image.name}`, (err) => {
+    image.mv(`./files/users/${image.name}`, (err) => {
       if (!err) {
-        image.pathCurrent = `/files/${image.name}`
+        image.pathCurrent = `/files/users/${image.name}`
       }
     })
   }
