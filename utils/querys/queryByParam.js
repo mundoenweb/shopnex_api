@@ -1,4 +1,4 @@
-const connection = require("../db/connection")
+const connection = require("../../config/connection")
 
 
 const queryByParam = (param, table, nameParam) => {

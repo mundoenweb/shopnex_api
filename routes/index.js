@@ -1,0 +1,33 @@
+const express = require('express')
+const router = express.Router()
+
+// module routers
+const routerBanks = require('../components/banks/banksRouter')
+// const routerLogin = require('./routes/session')
+// const routerRoles = require('./routes/roles')
+// const routerSubscriptions = require('./routes/subscriptions')
+// const routerUsers = require('./routes/users')
+// const routerBanksUsers = require('./routes/banksUsers')
+// const routerNews = require('./routes/news')
+// const routerTypeMovement = require('./routes/typeMovement')
+// const routerTasks = require('./routes/tasks')
+// const routerProfits = require('./routes/profits')
+// const routerMovements = require('./routes/movements')
+// const routerFiles = require('./routes/images')
+
+router.use(routerBanks)
+// router.use(routerLogin)
+// router.use(routerFiles)
+// router.use(routerRoles)
+// router.use(routerSubscriptions)
+// router.use(routerUsers)
+// router.use(routerBanksUsers)
+// router.use(routerNews)
+// router.use(routerTypeMovement)
+// router.use(routerTasks)
+// router.use(routerProfits)
+// router.use(routerMovements)
+// router.use(mercadopagoRouter)
+// router.use(emailRouter)
+
+module.exports = router
