@@ -1,9 +1,9 @@
 module.exports = {
   mysqlDB: {
-    host: '51.161.116.237',
-    port: '3306',
-    user: 'tuemprende',
-    password: 'Adoracionviva.3467',
-    database: 'tuemprende_nodejs'
+    host: process.env.HOST,
+    port: process.env.HOST_PORT,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE
   }
 }

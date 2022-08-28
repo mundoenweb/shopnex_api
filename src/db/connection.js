@@ -1,10 +1,7 @@
 const mysql = require('mysql')
 const { mysqlDB } = require("./config")
 
-console.log(mysqlDB)
 const connection = mysql.createConnection(mysqlDB)
-
-
 
 connection.connect((err, conn) =>{
   if (err) {
