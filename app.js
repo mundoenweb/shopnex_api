@@ -1,13 +1,12 @@
-// modulos
-const express = require('express')
+require('dotenv').config()
+const createError = require('http-errors');
+const express = require('express');
 const cors = require('cors')
 const fileUpload = require('express-fileupload')
 const connection = require('./src/db/connection')
 const { verifyToken } = require('./src/middlewares/verifyToken')
-require('dotenv').config()
 
 // module routers
-const { usersCreate } = require('./src/controller/users/users')
 const routerLogin = require('./src/routes/session')
 const routerRoles = require('./src/routes/roles')
 const routerSubscriptions = require('./src/routes/subscriptions')
@@ -21,16 +20,8 @@ const routerProfits = require('./src/routes/profits')
 const routerMovements = require('./src/routes/movements')
 const routerFiles = require('./src/routes/images')
 
-// creando app
-const app = express()
-// const api = '/api/v1'
-const api = ''
-
-// settings
+const app = express();
 app.set('title', 'aplicación realiza por tuemprende.com')
-app.set('port', 3467)
-// const port = app.get('port')
-const port = 3467
 
 // middlewares
 app.use(cors())
@@ -38,23 +29,32 @@ app.use(fileUpload())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
+
+app.use(routerLogin)
 app.use(routerFiles)
-app.use(api, routerLogin)
-app.post(`${api}/register`, usersCreate)
 
-app.use(verifyToken)
-app.use(api, routerRoles)
-app.use(api, routerSubscriptions)
-app.use(api, routerUsers)
-app.use(api, routerBanks)
-app.use(api, routerBanksUsers)
-app.use(api, routerNews)
-app.use(api, routerTypeMovement)
-app.use(api, routerTasks)
-app.use(api, routerProfits)
-app.use(api, routerMovements)
 
-// levantando servidor
-app.listen(port, () => {
-  console.log(`App corriendo en http://localhost:${port}`)
-})
+app.use(routerRoles)
+app.use(routerSubscriptions)
+app.use(routerUsers)
+app.use(routerBanks)
+app.use(routerBanksUsers)
+app.use(routerNews)
+app.use(routerTypeMovement)
+app.use(routerTasks)
+app.use(routerProfits)
+app.use(routerMovements)
+
+app.use(function(req, res, next) {
+  next(createError(404));
+});
+
+app.use(function(err, req, res, next) {
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  res.status(err.status || 500);
+  res.json(err);
+});
+
+module.exports = app;

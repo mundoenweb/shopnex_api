@@ -21,7 +21,7 @@ const getProfits = (req, res) => {
 }
 const getProfitById = (req, res) => {
   const id = parseInt(req.params.id, 10)
-  const sql = 'SELECT * FROM profits WHERE id=?'
+  const sql = 'SELECT * FROM profits WHERE users_id=?'
 
   connection.query(sql, id, (err, result) => {
     if (err) {
@@ -113,19 +113,24 @@ const putProfitsRefered = (referedBy, mount) => {
     const commissionRefered = mount * amountCommissionByRefered
     const table = 'profits'
 
-    const referredByUser = await queryByParam(referedBy, 'users', 'code_referred_by')
+    const referredByUser = await queryByParam(referedBy, 'users', 'code_referred')
     const profitsUsersReferred = await queryByParam(referredByUser[0].id, table, 'users_id')
+    console.log(profitsUsersReferred)
     
 
     let profitUpdate = {
       mount_referred: profitsUsersReferred[0].mount_referred += commissionRefered,
-      mount_total: profitsUsersReferred[0].mount_total += commissionRefered,
+      mount_total: profitsUsersReferred[0].mount_total += commissionRefered
     }
 
-    const sql = `UPDATE ${table} SET ?, 
+
+    const sql = `UPDATE ${table} SET 
+    mount_referred = ${profitUpdate.mount_referred}, 
+    mount_total = ${profitUpdate.mount_total}, 
     updated_at = DEFAULT WHERE users_id = ${referredByUser[0].id}`
 
-    connection.query(sql, profitUpdate, async (err, result) => {
+
+    connection.query(sql, async (err, result) => {
       if (err) {
         resolve(err)
       }

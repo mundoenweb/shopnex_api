@@ -19,6 +19,21 @@ const subscriptionsGet = (req, res) => {
     res.status(200).json(responseJson)
   })
 }
+const getSubscriptionById = (req, res) => {
+  const id = req.params.id
+  const sql = `SELECT * FROM subscriptions WHERE id = ${id}`
+  connection.query(sql, (err, result) => {
+    if (err) {
+      errorQuery(res, 500)
+      return
+    }
+    const responseJson = new StructResponse({
+      code: 200,
+      message: "consulta exitosa"
+    }, {}, result)
+    res.status(200).json(responseJson)
+  })
+}
 
 const subscriptionsCreate = (req, res) => {
   const data = req.body
@@ -126,6 +141,7 @@ const subscriptionsDelete = (req, res) => {
 }
 module.exports = {
   subscriptionsGet,
+  getSubscriptionById,
   subscriptionsCreate,
   subscriptionsUpdate,
   subscriptionsDelete

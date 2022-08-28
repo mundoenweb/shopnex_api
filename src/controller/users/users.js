@@ -65,14 +65,42 @@ const userGET = async (req, res) => {
   }, {}, user)
   res.status(200).json(responseJson)
 }
+const getUsersMyReferreds = (req, res) => {
+  const code_referred = req.params.code_referred
+  const table = 'users'
+  const sql = `SELECT
+  ${table}.id, name, email, task_complete, (mount_total * 0.5) AS mount_total
+  FROM ${table} INNER JOIN profits
+  ON ${table}.id = profits.users_id
+  WHERE code_referred_by = '${code_referred}'
+  ORDER BY ${table}.created_at DESC`
+
+  connection.query(sql, (err, result) => {
+    if (err) {
+      errorQuery(res, 500, err)
+      return
+    }
+    const users = new StructResponse({
+      code: 200,
+      message: 'consulta exitosa'
+    }, {}, result)
+
+    res.status(200).json(users)
+  })
+}
 
 const usersCreate = (req, res) => {
   const data = req.body
   const table = 'users'
-  const sql = `INSERT INTO ${table}
+  let sql = `INSERT INTO ${table}
   (roles_id, subscriptions_id, email, password, code_referred_by)
-  VALUES(1,1, '${data.email}', '${bcrypt.hashSync(data.password, 10)}', '${data.code_referred_by}')`
+  VALUES(1,1, '${data.email}', '${bcrypt.hashSync(data.password, 10)}', `
 
+  if (data.code_referred_by) {
+    sql = sql + `'${data.code_referred_by}')`
+  } else {
+    sql = sql + `${null})`
+  }
   if (!data.email || !data.password) {
     errorQuery(res, 400, null, "uno o mas campos estan indefinidos")
     return
@@ -116,7 +144,9 @@ const usersUpdate = (req, res) => {
     return
   }
 
-  data.code_referred_by = btoa(data.number_credential);
+  if (!data.code_referred) {
+    data.code_referred = btoa(data.number_credential);
+  }
   const sql = `UPDATE ${table} SET ? WHERE id = ${id}`
 
   connection.query(sql, data, async (err, _) => {
@@ -137,26 +167,52 @@ const usersUpdate = (req, res) => {
     })
   })
 }
+const usersUpdateQtyTask = (req, res) => {
+  return new Promise(async (resolve, _) => {
+    const id = req.userID
+    const table = 'users'
+
+    const user = await queryByParamID(id, table)
+    const current_task_complete = user[0].task_complete += 1
+
+    const sql = `UPDATE ${table} 
+  SET task_complete = ${current_task_complete} WHERE id = ${id}`
+
+    connection.query(sql, async (err, result) => {
+      if (err) {
+        console.log('error')
+        resolve(err)
+        return
+      }
+      resolve(result)
+    })
+  })
+}
 
 const usersUpdateCredentials = (req, res) => {
   const id = parseInt(req.params.id, 10)
   const table = 'users'
+  const imgs = req.files
 
-  if (!req.files.photo_perfil || !req.files.photo_credential_front
-    || !req.files.photo_credential_revers) {
-    errorQuery(res, 400)
+  if (!imgs.photo_perfil || !imgs.photo_credential_front
+    || !imgs.photo_credential_revers) {
+    errorQuery(res, 400, null, 'favor pase todas las imagenes')
     return
   }
 
-  let photo_perfil = req.files.photo_perfil
-  let photo_credential_front = req.files.photo_credential_front
-  let photo_credential_revers = req.files.photo_credential_revers
+
+  let photo_perfil = imgs.photo_perfil
+  let photo_credential_front = imgs.photo_credential_front
+  let photo_credential_revers = imgs.photo_credential_revers
 
   const images = [
     photo_perfil,
     photo_credential_front,
     photo_credential_revers
   ]
+
+
+
 
   for (let image of images) {
     if (!image) continue
@@ -170,6 +226,9 @@ const usersUpdateCredentials = (req, res) => {
       }
     })
   }
+
+  // console.log(images)
+  // return errorQuery(res, 400)
 
   setTimeout(() => {
 
@@ -295,6 +354,8 @@ module.exports = {
   usersGet,
   usersGetForApproval,
   userGET,
+  getUsersMyReferreds,
+  usersUpdateQtyTask,
   usersCreate,
   usersUpdate,
   usersUpdateCredentials,

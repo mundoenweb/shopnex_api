@@ -4,7 +4,7 @@ const queryByParamID = require('../../handlersQuerys/queryByParamID')
 const StructResponse = require('../../models/response')
 
 const getNews = (req, res) => {
-  const sql = 'SELECT * FROM news'
+  const sql = 'SELECT * FROM news ORDER BY created_at DESC'
 
   connection.query(sql, (err, result) => {
     if (err) {

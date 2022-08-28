@@ -4,12 +4,15 @@ const {
   subscriptionsGet, 
   subscriptionsCreate,
   subscriptionsUpdate, 
-  subscriptionsDelete  
-} = require('../controller/subscriptions/subscriptions')
+  subscriptionsDelete,  
+  getSubscriptionById
+} = require('../controller/subscriptions/subscriptions');
+const { verifyToken } = require('../middlewares/verifyToken');
 
-router.get('/subscriptions', subscriptionsGet)
-router.post('/subscriptions', subscriptionsCreate)
-router.put('/subscriptions/:id', subscriptionsUpdate)
-router.delete('/subscriptions/:id', subscriptionsDelete)
+router.get('/subscriptions', verifyToken, subscriptionsGet)
+router.get('/subscriptions/:id', verifyToken, getSubscriptionById)
+router.post('/subscriptions', verifyToken, subscriptionsCreate)
+router.put('/subscriptions/:id', verifyToken, subscriptionsUpdate)
+router.delete('/subscriptions/:id', verifyToken, subscriptionsDelete)
 
 module.exports = router

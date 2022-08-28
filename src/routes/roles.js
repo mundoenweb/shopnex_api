@@ -6,11 +6,12 @@ const {
   rolesUpdate,
   rolesDelete
 } = require('../controller/roles/roles')
+const { verifyToken } = require('../middlewares/verifyToken')
 
 
-router.get('/roles', rolesGet)
-router.post('/roles', rolesCreate)
-router.put('/roles/:id', rolesUpdate)
-router.delete('/roles/:id', rolesDelete)
+router.get('/roles', verifyToken, rolesGet)
+router.post('/roles', verifyToken, rolesCreate)
+router.put('/roles/:id', verifyToken, rolesUpdate)
+router.delete('/roles/:id', verifyToken, rolesDelete)
 
 module.exports = router

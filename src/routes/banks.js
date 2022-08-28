@@ -1,15 +1,16 @@
 const express = require('express')
 const router = express.Router()
 const { getBanks, getOnBank, postBankCreate, putBank, putActiveBank, deleteBank } = require('../controller/banks/banks')
+const { verifyToken } = require('../middlewares/verifyToken')
 
-router.get('/banks', getBanks)
-router.get('/banks/:id', getOnBank)
+router.get('/banks', verifyToken, getBanks)
+router.get('/banks/:id', verifyToken, getOnBank)
 
-router.post('/banks', postBankCreate)
+router.post('/banks', verifyToken, postBankCreate)
 
-router.put('/banks/:id', putBank)
-router.put('/banks/active', putActiveBank)
+router.put('/banks/:id', verifyToken, putBank)
+router.put('/banks/active', verifyToken, putActiveBank)
 
-router.delete('/banks/:id', deleteBank)
+router.delete('/banks/:id', verifyToken, deleteBank)
 
 module.exports = router

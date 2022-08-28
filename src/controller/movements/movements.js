@@ -3,7 +3,7 @@ const errorQuery = require('../../handlersQuerys/errorQuery')
 const queryByParamID = require('../../handlersQuerys/queryByParamID')
 const StructResponse = require('../../models/response')
 const { putProfitsWithDrawOrBuy, putProfits, putProfitsRefered } = require('../profits/profits')
-const { usersSubscriptions } = require('../users/users')
+const { usersSubscriptions, usersUpdateQtyTask } = require('../users/users')
 
 const createMovementWithdraw = async (req, res) => {
   const data = req.body
@@ -131,6 +131,7 @@ const createMovementTask = async (req, res) => {
     if (referedBy) {
       await putProfitsRefered(referedBy, commission_task)
     }
+    await usersUpdateQtyTask(req, res)
     const profit = await putProfits(req, res)
 
 
@@ -162,10 +163,45 @@ const getMovementsAll = (_, res) => {
     res.status(200).json(users)
   })
 }
+const getMovementsTaks = (req, res) => {
+  const id = parseInt(req.params.id, 10)
+  const table = 'movements'
+
+  const sql = `SELECT 
+  ${table}.id, users.name, tasks.name AS task
+  FROM ${table} INNER JOIN users
+  ON ${table}.users_id = users.id
+  INNER JOIN tasks
+  ON ${table}.tasks_id = tasks.id
+  WHERE type_transactions_id = 3
+  ORDER BY ${table}.created_at DESC`
+
+  connection.query(sql, (err, result) => {
+    if (err) {
+      errorQuery(res, 400, err)
+      return
+    }
+    const users = new StructResponse({
+      code: 200,
+      message: 'consulta exitosaaaa'
+    }, {}, result)
+
+    res.status(200).json(users)
+  })
+}
 const getMovementsById = (req, res) => {
   const id = parseInt(req.params.id, 10)
   const table = 'movements'
-  const sql = `SELECT * FROM ${table} WHERE id = ${id} ORDER BY created_at DESC`
+
+  const sql = `SELECT 
+  ${table}.id, tasks.name AS taskName, commission_task, ${table}.created_at AS date,
+  users.name AS nameUser
+  FROM ${table} INNER JOIN users
+  ON ${table}.users_id = users.id
+  INNER JOIN tasks
+  ON ${table}.tasks_id = tasks.id
+  WHERE ${table}.id = ${id}
+  ORDER BY ${table}.created_at DESC`
 
   connection.query(sql, (err, result) => {
     if (err) {
@@ -199,6 +235,31 @@ const getMovementsByIdUser = (req, res) => {
   })
 }
 
+const getMovementsByTaskByIdUser = (req, res) => {
+  const id = parseInt(req.params.id, 10)
+  const table = 'movements'
+  const sql = `SELECT
+  ${table}.id, name, commission_task
+  FROM ${table} INNER JOIN tasks
+  ON ${table}.tasks_id = tasks.id
+  WHERE users_id = ${id}
+  AND type_transactions_id = 3
+  ORDER BY ${table}.created_at DESC`
+
+  connection.query(sql, (err, result) => {
+    if (err) {
+      errorQuery(res, 400, err)
+      return
+    }
+    const users = new StructResponse({
+      code: 200,
+      message: 'consulta exitosa'
+    }, {}, result)
+
+    res.status(200).json(users)
+  })
+}
+
 
 
 module.exports = {
@@ -206,6 +267,8 @@ module.exports = {
   createMovementBuy,
   createMovementTask,
   getMovementsAll,
+  getMovementsTaks,
   getMovementsById,
-  getMovementsByIdUser
+  getMovementsByIdUser,
+  getMovementsByTaskByIdUser
 }

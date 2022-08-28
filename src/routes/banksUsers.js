@@ -7,15 +7,16 @@ const {
   putBanksUsers,
   deleteBanksUsers
 } = require('../controller/banksUsers/banksUsers')
+const { verifyToken } = require('../middlewares/verifyToken')
 const router = express.Router()
 
-router.get('/banks_users', getBanksUsers)
-router.get('/banks_users/all/:id', getallBanksUsers) //id del usuario
-router.get('/banks_users/:id', getOnBanksUsers) //id del banco
+router.get('/banks_users', verifyToken, getBanksUsers)
+router.get('/banks_users/all/:id', verifyToken, getallBanksUsers) //id del usuario
+router.get('/banks_users/:id', verifyToken, getOnBanksUsers) //id del banco
 
-router.post('/banks_users', postCreateBanksUsers)
+router.post('/banks_users', verifyToken, postCreateBanksUsers)
 
-router.put('/banks_users/:id', putBanksUsers)
-router.delete('/banks_users/:id', deleteBanksUsers)
+router.put('/banks_users/:id', verifyToken, putBanksUsers)
+router.delete('/banks_users/:id', verifyToken, deleteBanksUsers)
 
 module.exports = router

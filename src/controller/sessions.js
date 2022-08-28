@@ -32,7 +32,6 @@ const postLogin = (req, res) => {
         code: 201,
         message: `Bienvenido ${user.email}`
       }, {}, [{ token, user }])
-      console.log(responseJson)
       res.status(201).json(responseJson)
     })
 
