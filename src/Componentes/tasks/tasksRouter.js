@@ -1,6 +1,6 @@
 const express = require('express')
 const { getTasks, getTask, postCreateTask, putTask, deleteTask } = require('../controller/tasks/tasks')
-const { verifyToken } = require('../middlewares/verifyToken')
+const { verifyToken } = require('../../middlewares/verifyToken')
 const router = express.Router()
 
 router.get('/tasks', verifyToken, getTasks)

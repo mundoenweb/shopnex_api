@@ -11,7 +11,7 @@ const {
   usersGetForApproval,
   getUsersMyReferreds
 } = require('../controller/users/users');
-const { verifyToken } = require('../middlewares/verifyToken');
+const { verifyToken } = require('../../middlewares/verifyToken');
 
 router.get('/users', verifyToken, usersGet)
 router.get('/users/approval', verifyToken, usersGetForApproval)

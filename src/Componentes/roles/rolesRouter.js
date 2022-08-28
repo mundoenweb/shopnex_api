@@ -6,7 +6,7 @@ const {
   rolesUpdate,
   rolesDelete
 } = require('../controller/roles/roles')
-const { verifyToken } = require('../middlewares/verifyToken')
+const { verifyToken } = require('../../middlewares/verifyToken')
 
 
 router.get('/roles', verifyToken, rolesGet)

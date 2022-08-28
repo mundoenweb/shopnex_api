@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const { getBanks, getOnBank, postBankCreate, putBank, putActiveBank, deleteBank } = require('../controller/banks/banks')
-const { verifyToken } = require('../middlewares/verifyToken')
+const { getBanks, getOnBank, postBankCreate, putBank, putActiveBank, deleteBank } = require('../../controller/banks/banks')
+const { verifyToken } = require('../../middlewares/verifyToken')
 
 router.get('/banks', verifyToken, getBanks)
 router.get('/banks/:id', verifyToken, getOnBank)

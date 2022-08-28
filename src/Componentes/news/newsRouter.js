@@ -1,6 +1,6 @@
 const express = require('express')
 const { getNews, getOneNews, postCreateNews, putNews, deleteNews } = require('../controller/news/news')
-const { verifyToken } = require('../middlewares/verifyToken')
+const { verifyToken } = require('../../middlewares/verifyToken')
 const router = express.Router()
 
 router.get('/news', verifyToken, getNews)

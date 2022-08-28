@@ -7,7 +7,7 @@ const {
   putBanksUsers,
   deleteBanksUsers
 } = require('../controller/banksUsers/banksUsers')
-const { verifyToken } = require('../middlewares/verifyToken')
+const { verifyToken } = require('../../middlewares/verifyToken')
 const router = express.Router()
 
 router.get('/banks_users', verifyToken, getBanksUsers)

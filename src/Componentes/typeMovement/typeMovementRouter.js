@@ -1,6 +1,6 @@
 const express = require('express')
 const { getTypeMovement, getOneTypeMovement, postCreateTypeMovement, putTypeMovement, deleteTypeMovement } = require('../controller/typeMovement/typeMovement')
-const { verifyToken } = require('../middlewares/verifyToken')
+const { verifyToken } = require('../../middlewares/verifyToken')
 const router = express.Router()
 
 router.get('/type_movement', verifyToken, getTypeMovement)

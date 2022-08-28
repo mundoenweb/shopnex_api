@@ -7,7 +7,7 @@ const {
   subscriptionsDelete,  
   getSubscriptionById
 } = require('../controller/subscriptions/subscriptions');
-const { verifyToken } = require('../middlewares/verifyToken');
+const { verifyToken } = require('../../middlewares/verifyToken');
 
 router.get('/subscriptions', verifyToken, subscriptionsGet)
 router.get('/subscriptions/:id', verifyToken, getSubscriptionById)

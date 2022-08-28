@@ -1,23 +1,24 @@
-const StructResponse = require("../models/response")
 const jwt = require('jsonwebtoken')
-const errorQuery = require("../handlersQuerys/errorQuery")
-const secretPassword = "Adoracionviva.3467"
+const createError = require('http-errors')
+
+const secretPassword = process.env.SECRET_PASSWORD_JWT
 
 const verifyToken = (req, res, next) => {
   const authorization_header = req.headers['authorization']
 
   if (!authorization_header) {
-    errorQuery(res, 401)
+    next(createError(401))
     return
   }
+
   const token = authorization_header.split(" ")[1]
 
   jwt.verify(token, secretPassword, (err, userData) => {
     if (err) {
-      errorQuery(res, 401, err, "token invalido")
+      next(createError(401, err))
       return
     }
-    req.userData = userData.user
+    req.userData = userData
     next()
   })
 }
