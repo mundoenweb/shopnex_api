@@ -16,7 +16,7 @@ const customError = (error) => {
     case "ER_DUP_ENTRY":
       return {
         ...error,
-        message: `El ${error.table} ya esta registrado`,
+        message: `${error.table} duplicado (a)`,
         status: 400
       }
     case "ER_NO_SUCH_TABLE":
@@ -33,7 +33,7 @@ const customError = (error) => {
     default:
       return {
         ...error,
-        message: 'Error interno, intenta más tarde',
+        message: error.message || 'Error interno, intenta más tarde',
       }
   }
 }
