@@ -1,15 +1,16 @@
 const handlerMoveImage = (image, folder) => {
   return new Promise((resolve, _) => {
     const extension = image.name.split('.')[1]
-    image.name = `${image.md5}.${extension}`
-  
-    image.mv(`./public/images/${folder}/${image.name}`, (err) => {
+    const date = new Date().getTime()
+    const newNameImage = `${date}_${image.md5}.${extension}`
+    const pathImage = `/public/images/${folder}/${newNameImage}`
+
+    image.mv(`.${pathImage}`, (err) => {
       if (err) {
-        image.pathDB = ''
-        return resolve(false)
+        resolve({...err, error:true})
+        return
       }
-      image.pathDB = `/public/images/${folder}/${image.name}`
-      resolve(true)
+      resolve(pathImage)
     })
   })
 }
