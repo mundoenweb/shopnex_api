@@ -14,10 +14,7 @@ const verifyToken = (req, res, next) => {
   const token = authorization_header.split(" ")[1]
 
   jwt.verify(token, secretPassword, (err, userData) => {
-    if (err) {
-      next(createError(401, err))
-      return
-    }
+    if (err) return next(createError(401, err))
     req.userData = userData
     next()
   })

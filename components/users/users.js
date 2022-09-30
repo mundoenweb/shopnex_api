@@ -6,7 +6,7 @@ const queryByParamID = require('../../handlersQuerys/queryByParamID')
 const StructResponse = require('../../models/response')
 const { postCreateProfits } = require('../profits/profits')
 const expMail = /\w+@\w+\.+[a-z]/
-const secretPassword = "Adoracionviva.3467"
+const secretPassword = process.env.SECRET_PASSWORD_JWT
 
 
 const usersGet = (req, res) => {

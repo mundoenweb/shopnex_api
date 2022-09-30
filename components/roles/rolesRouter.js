@@ -1,17 +1,17 @@
 const express = require('express')
 const router = express.Router()
 const {
-  rolesGet,
-  rolesCreate,
-  rolesUpdate,
-  rolesDelete
-} = require('../controller/roles/roles')
-const { verifyToken } = require('../../middlewares/verifyToken')
+  createRole,
+  getAllRoles,
+  getRole,
+  updateRole,
+  deleteRol
+} = require('./rolesController')
 
-
-router.get('/roles', verifyToken, rolesGet)
-router.post('/roles', verifyToken, rolesCreate)
-router.put('/roles/:id', verifyToken, rolesUpdate)
-router.delete('/roles/:id', verifyToken, rolesDelete)
+router.post('/roles', createRole)
+router.get('/roles', getAllRoles)
+router.get('/roles/:id', getRole)
+router.put('/roles/:id', updateRole)
+router.delete('/roles/:id', deleteRol)
 
 module.exports = router
